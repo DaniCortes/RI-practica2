@@ -3,6 +3,7 @@ package org.example;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.analysis.Analyzer;
@@ -25,6 +26,7 @@ import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.sax.BodyContentHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.xml.sax.SAXException;
 
 import java.io.*;
@@ -152,13 +154,9 @@ public class Document {
     return tokens;
   }
 
-  public void writeStats() {
-
-  }
-
-  private String createFile(String mode, String fileType) throws IOException {
-    String filename = getFilenameWithoutExtension() + "-" + mode;
-    String filePath = "src/main/resources/" + fileType + "/" + filename + ".dat";
+  private String createFile(String type, String folder) throws IOException {
+    String filename = getFilenameWithoutExtension() + "-" + type;
+    String filePath = "src/main/resources/" + folder + "/" + filename + ".dat";
     File file = new File(filePath);
 
     if (file.createNewFile()) {
@@ -173,39 +171,35 @@ public class Document {
     return filePath;
   }
 
-  private void writeDataInFile(String mode, String fileType) throws IOException {
-    List<Entry<String, Integer>> sortedTokens = getSortedTokens(mode);
-    String filePath = createFile(mode, fileType);
+  private List<Entry<String, Integer>> getSortedTokens(String type) {
+    Map<String, Integer> tokens;
+    switch (type) {
+      case "language":
+        tokens = languageTokens;
+      case "standard":
+        tokens = standardTokens;
+      default:
+        tokens = whitespaceTokens;
+    }
+
+    List<Entry<String, Integer>> sortedTokens = new ArrayList<>(tokens.entrySet());
+    sortedTokens.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+    return sortedTokens;
+  }
+
+  public void writeDataInFile(String type, String fileType) throws IOException {
+    List<Entry<String, Integer>> sortedTokens = getSortedTokens(type);
+    String filePath = createFile(type, fileType);
 
     try (FileWriter writer = new FileWriter(filePath)) {
       for (Map.Entry<String, Integer> token : sortedTokens) {
         writer.write(token.getKey() + " " + token.getValue()
             + String.format("%n"));
       }
-      System.out.println("Tokens saved." + String.format("%n"));
+      System.out.println(type + " tokens saved." + String.format("%n"));
     } catch (IOException e) {
       System.out.println("Error: " + e.getMessage());
     }
-  }
-
-  private List<Entry<String, Integer>> getSortedTokens(String mode) {
-    Map<String, Integer> tokens;
-    String printedString;
-    switch (mode) {
-      case "language":
-        tokens = languageTokens;
-        printedString = "Language";
-      case "standard":
-        tokens = standardTokens;
-        printedString = "Standard";
-      default:
-        tokens = whitespaceTokens;
-        printedString = "Whitespace";
-    }
-
-    List<Entry<String, Integer>> sortedTokens = new ArrayList<>(tokens.entrySet());
-    sortedTokens.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
-    return sortedTokens;
   }
 
   public String getName() {
