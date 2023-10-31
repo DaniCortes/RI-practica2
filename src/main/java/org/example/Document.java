@@ -3,13 +3,11 @@ package org.example;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map.Entry;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.core.StopAnalyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.el.GreekAnalyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
@@ -25,8 +23,6 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.sax.BodyContentHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.xml.sax.SAXException;
 
 import java.io.*;
@@ -43,13 +39,9 @@ public class Document {
   private String language;
   private final BodyContentHandler textHandler;
   private final Metadata metadata;
-  private final Map<String, Integer> languageTokens;
-  private List<Entry<String, Integer>> sortedLanguageTokens;
-  private final Map<String, Integer> standardTokens;
-  private List<Entry<String, Integer>> sortedStandardTokens;
-
-  private final Map<String, Integer> whitespaceTokens;
-  private List<Entry<String, Integer>> sortedWhitespaceTokens;
+  private final List<Entry<String, Integer>> languageTokens;
+  private final List<Entry<String, Integer>> standardTokens;
+  private final List<Entry<String, Integer>> whitespaceTokens;
 
 
   public Document(File file) throws TikaException, IOException, SAXException {
@@ -66,9 +58,12 @@ public class Document {
     InputStream is = new BufferedInputStream(new FileInputStream(file));
     parser.parse(is, textHandler, metadata, parseContext);
     retrieveLanguage();
-    languageTokens = tokenizeDocument("language");
-    standardTokens = tokenizeDocument("standard");
-    whitespaceTokens = tokenizeDocument("");
+
+    languageTokens = getSortedTokens("language");
+    standardTokens = getSortedTokens("standard");
+    whitespaceTokens = getSortedTokens("whitespace");
+    writeTokensInFile();
+
   }
 
   private String identifyLanguage() {
@@ -93,7 +88,7 @@ public class Document {
   }
 
   private int countStopWords() throws IOException {
-    String pathName = "src/main/java/resources/" + language;
+    String pathName = "src/main/resources/stopwords/" + language + ".txt";
     Path path = Paths.get(pathName);
     int lines;
     try (Stream<String> stream = Files.lines(path)) {
@@ -105,7 +100,7 @@ public class Document {
   private CharArraySet getLanguageStopWords() throws IOException {
     CharArraySet stopWords = new CharArraySet(countStopWords(), true);
     try (BufferedReader br = new BufferedReader(
-        new FileReader("src/main/java/resources/stopwords/" + language))) {
+        new FileReader("src/main/resources/stopwords/" + language + ".txt"))) {
       String line;
       while ((line = br.readLine()) != null) {
         stopWords.add(line);
@@ -119,7 +114,7 @@ public class Document {
       case "language":
         switch (language) {
           case "en":
-            return new StopAnalyzer(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
+            return new EnglishAnalyzer(getLanguageStopWords());
           case "el":
             return new GreekAnalyzer(getLanguageStopWords());
           case "fr":
@@ -134,7 +129,7 @@ public class Document {
     }
   }
 
-  public Map<String, Integer> tokenizeDocument(String mode) throws IOException {
+  private Map<String, Integer> tokenizeDocument(String mode) throws IOException {
     Analyzer an = selectAnalyzer(mode);
     Map<String, Integer> tokens = new HashMap<>();
     TokenStream stream = an.tokenStream(null, textHandler.toString());
@@ -154,9 +149,9 @@ public class Document {
     return tokens;
   }
 
-  private String createFile(String type, String folder) throws IOException {
+  private String createFile(String type) throws IOException {
     String filename = getFilenameWithoutExtension() + "-" + type;
-    String filePath = "src/main/resources/" + folder + "/" + filename + ".dat";
+    String filePath = "src/main/resources/tokens/" + filename + ".dat";
     File file = new File(filePath);
 
     if (file.createNewFile()) {
@@ -171,25 +166,28 @@ public class Document {
     return filePath;
   }
 
-  private List<Entry<String, Integer>> getSortedTokens(String type) {
-    Map<String, Integer> tokens;
-    switch (type) {
-      case "language":
-        tokens = languageTokens;
-      case "standard":
-        tokens = standardTokens;
-      default:
-        tokens = whitespaceTokens;
-    }
+  private List<Entry<String, Integer>> getSortedTokens(String type) throws IOException {
+    Map<String, Integer> tokens = tokenizeDocument(type);
 
     List<Entry<String, Integer>> sortedTokens = new ArrayList<>(tokens.entrySet());
     sortedTokens.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
     return sortedTokens;
   }
 
-  public void writeDataInFile(String type, String fileType) throws IOException {
-    List<Entry<String, Integer>> sortedTokens = getSortedTokens(type);
-    String filePath = createFile(type, fileType);
+  public void writeTokensInFile() throws IOException {
+    writeTokensInFile("language");
+    writeTokensInFile("standard");
+    writeTokensInFile("whitespace");
+  }
+
+  private void writeTokensInFile(String type) throws IOException {
+    List<Entry<String, Integer>> sortedTokens = switch (type) {
+      case "language" -> languageTokens;
+      case "standard" -> standardTokens;
+      default -> whitespaceTokens;
+    };
+
+    String filePath = createFile(type);
 
     try (FileWriter writer = new FileWriter(filePath)) {
       for (Map.Entry<String, Integer> token : sortedTokens) {
