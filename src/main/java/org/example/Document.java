@@ -124,6 +124,9 @@ public class Document {
         }
       case "standard":
         return new StandardAnalyzer();
+
+      case "code":
+        return new StandardAnalyzer();
       default:
         return new WhitespaceAnalyzer();
     }
