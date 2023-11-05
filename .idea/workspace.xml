@@ -4,14 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dbb561f6-df3d-49e2-9d77-feaa11db5323" name="Changes" comment="Third commit">
+    <list default="true" id="dbb561f6-df3d-49e2-9d77-feaa11db5323" name="Changes" comment="Primer punto hecho">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/code/sie_api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/stopwords/py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Document.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Document.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/stopwords/el" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stopwords/el.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/stopwords/en" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stopwords/en.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/stopwords/fr" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stopwords/fr.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/stopwords/it" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stopwords/it.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/PythonCodeAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/PythonCodeAnalyzer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/stopwords/el.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stopwords/el" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/stopwords/en.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stopwords/en" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/stopwords/fr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stopwords/fr" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/stopwords/it.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stopwords/it" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +73,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "onboarding.tips.debug.path": "C:/Users/daniel/Universidad/RI/RI-practica2/src/main/java/org/example/Main.java",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "editor.preferences.fonts.default",
@@ -110,7 +114,9 @@
       <workItem from="1698429012072" duration="436000" />
       <workItem from="1698500791205" duration="1507000" />
       <workItem from="1698502427398" duration="6903000" />
-      <workItem from="1698756891603" duration="3078000" />
+      <workItem from="1698756891603" duration="4267000" />
+      <workItem from="1699100658059" duration="351000" />
+      <workItem from="1699101017388" duration="12952000" />
     </task>
     <task id="LOCAL-00001" summary="Second commit">
       <option name="closed" value="true" />
@@ -136,7 +142,15 @@
       <option name="project" value="LOCAL" />
       <updated>1698687722949</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Primer punto hecho">
+      <option name="closed" value="true" />
+      <created>1698760507300</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1698760507300</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -156,7 +170,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Second commit" />
     <MESSAGE value="Third commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Third commit" />
+    <MESSAGE value="Primer punto hecho" />
+    <option name="LAST_COMMIT_MESSAGE" value="Primer punto hecho" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

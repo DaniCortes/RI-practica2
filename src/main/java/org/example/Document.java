@@ -41,12 +41,11 @@ public class Document {
   private final Metadata metadata;
   private final List<Entry<String, Integer>> languageTokens;
   private final List<Entry<String, Integer>> standardTokens;
-  private final List<Entry<String, Integer>> whitespaceTokens;
+  private final List<Entry<String, Integer>> wildcardTokens;
 
 
-  public Document(File file) throws TikaException, IOException, SAXException {
+  public Document(File file, Boolean code) throws TikaException, IOException, SAXException {
     this.file = file;
-
     AutoDetectParser parser = new AutoDetectParser();
     textHandler = new BodyContentHandler(-1);
     metadata = new Metadata();
@@ -59,10 +58,21 @@ public class Document {
     parser.parse(is, textHandler, metadata, parseContext);
     retrieveLanguage();
 
-    languageTokens = getSortedTokens("language");
-    standardTokens = getSortedTokens("standard");
-    whitespaceTokens = getSortedTokens("whitespace");
-    writeTokensInFile();
+    new File("src/main/resources/tokens").mkdir();
+
+    if (!code) {
+      languageTokens = getSortedTokens("language");
+      standardTokens = getSortedTokens("standard");
+      wildcardTokens = getSortedTokens("whitespace");
+      writeTokensInFile();
+
+    } else {
+      languageTokens = null;
+      standardTokens = null;
+      wildcardTokens = getSortedTokens("code");
+      writeTokensInFile("code");
+    }
+
 
   }
 
@@ -87,8 +97,13 @@ public class Document {
     return FilenameUtils.removeExtension(file.getName());
   }
 
-  private int countStopWords() throws IOException {
-    String pathName = "src/main/resources/stopwords/" + language + ".txt";
+  private int countStopWords(String mode) throws IOException {
+    String pathName;
+    if (mode.equals("language")) {
+      pathName = "src/main/resources/stopwords/" + language;
+    } else {
+      pathName = "src/main/resources/stopwords/py";
+    }
     Path path = Paths.get(pathName);
     int lines;
     try (Stream<String> stream = Files.lines(path)) {
@@ -98,9 +113,21 @@ public class Document {
   }
 
   private CharArraySet getLanguageStopWords() throws IOException {
-    CharArraySet stopWords = new CharArraySet(countStopWords(), true);
+    CharArraySet stopWords = new CharArraySet(countStopWords("language"), true);
     try (BufferedReader br = new BufferedReader(
-        new FileReader("src/main/resources/stopwords/" + language + ".txt"))) {
+        new FileReader("src/main/resources/stopwords/" + language))) {
+      String line;
+      while ((line = br.readLine()) != null) {
+        stopWords.add(line);
+      }
+    }
+    return stopWords;
+  }
+
+  private CharArraySet getCodeStopWords() throws IOException {
+    CharArraySet stopWords = new CharArraySet(countStopWords("code"), true);
+    try (BufferedReader br = new BufferedReader(
+        new FileReader("src/main/resources/stopwords/py"))) {
       String line;
       while ((line = br.readLine()) != null) {
         stopWords.add(line);
@@ -126,7 +153,7 @@ public class Document {
         return new StandardAnalyzer();
 
       case "code":
-        return new StandardAnalyzer();
+        return new PythonCodeAnalyzer(getCodeStopWords());
       default:
         return new WhitespaceAnalyzer();
     }
@@ -187,7 +214,7 @@ public class Document {
     List<Entry<String, Integer>> sortedTokens = switch (type) {
       case "language" -> languageTokens;
       case "standard" -> standardTokens;
-      default -> whitespaceTokens;
+      default -> wildcardTokens;
     };
 
     String filePath = createFile(type);
