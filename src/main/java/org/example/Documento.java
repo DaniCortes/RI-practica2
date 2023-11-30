@@ -15,6 +15,9 @@ import org.apache.lucene.analysis.fr.FrenchAnalyzer;
 import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.langdetect.optimaize.OptimaizeLangDetector;
 import org.apache.tika.language.detect.LanguageDetector;
@@ -33,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class Document {
+public class Documento {
 
   private final File file;
   private String language;
@@ -44,7 +47,7 @@ public class Document {
   private final List<Entry<String, Integer>> wildcardTokens;
 
 
-  public Document(File file, Boolean code) throws TikaException, IOException, SAXException {
+  public Documento(File file) throws TikaException, IOException, SAXException {
     this.file = file;
     AutoDetectParser parser = new AutoDetectParser();
     textHandler = new BodyContentHandler(-1);
@@ -60,20 +63,10 @@ public class Document {
 
     new File("src/main/resources/tokens").mkdir();
 
-    if (!code) {
-      languageTokens = getSortedTokens("language");
-      standardTokens = getSortedTokens("standard");
-      wildcardTokens = getSortedTokens("whitespace");
-      writeTokensInFile();
-
-    } else {
-      languageTokens = null;
-      standardTokens = null;
-      wildcardTokens = getSortedTokens("code");
-      writeTokensInFile("code");
-    }
-
-
+    languageTokens = getSortedTokens("language");
+    standardTokens = getSortedTokens("standard");
+    wildcardTokens = getSortedTokens("whitespace");
+    writeTokensInFile();
   }
 
   private String identifyLanguage() {
@@ -124,18 +117,6 @@ public class Document {
     return stopWords;
   }
 
-  private CharArraySet getCodeStopWords() throws IOException {
-    CharArraySet stopWords = new CharArraySet(countStopWords("code"), true);
-    try (BufferedReader br = new BufferedReader(
-        new FileReader("src/main/resources/stopwords/py"))) {
-      String line;
-      while ((line = br.readLine()) != null) {
-        stopWords.add(line);
-      }
-    }
-    return stopWords;
-  }
-
   private Analyzer selectAnalyzer(String mode) throws IOException {
     switch (mode) {
       case "language":
@@ -151,9 +132,6 @@ public class Document {
         }
       case "standard":
         return new StandardAnalyzer();
-
-      case "code":
-        return new PythonCodeAnalyzer(getCodeStopWords());
       default:
         return new WhitespaceAnalyzer();
     }
@@ -177,6 +155,22 @@ public class Document {
     stream.close();
 
     return tokens;
+  }
+
+  public String getDocumentTokens() throws IOException {
+    Analyzer an = selectAnalyzer("language");
+    StringBuilder tokens = new StringBuilder();
+    TokenStream stream = an.tokenStream(null, textHandler.toString());
+
+    stream.reset();
+    while (stream.incrementToken()) {
+      String token = stream.getAttribute(CharTermAttribute.class).toString();
+      tokens.append(token).append(" ");
+    }
+    stream.end();
+    stream.close();
+
+    return tokens.toString();
   }
 
   private String createFile(String type) throws IOException {
@@ -240,5 +234,12 @@ public class Document {
 
   public String toString() {
     return textHandler.toString();
+  }
+
+  public Document getLuceneDocument(Documento documento) throws IOException {
+    Document doc = new Document();
+    doc.add(new TextField("content", getDocumentTokens(), Field.Store.YES));
+    System.out.println(doc.get("content"));
+    return doc;
   }
 }
