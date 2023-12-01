@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
+import javax.print.Doc;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
@@ -46,6 +47,8 @@ public class Documento {
   private final List<Entry<String, Integer>> standardTokens;
   private final List<Entry<String, Integer>> wildcardTokens;
 
+  private final Document doc;
+
 
   public Documento(File file) throws TikaException, IOException, SAXException {
     this.file = file;
@@ -67,6 +70,8 @@ public class Documento {
     standardTokens = getSortedTokens("standard");
     wildcardTokens = getSortedTokens("whitespace");
     writeTokensInFile();
+
+    doc = createLuceneDocument();
   }
 
   private String identifyLanguage() {
@@ -135,6 +140,10 @@ public class Documento {
       default:
         return new WhitespaceAnalyzer();
     }
+  }
+
+  public Analyzer getAnalizer() throws IOException {
+    return new EnglishAnalyzer(getLanguageStopWords());
   }
 
   private Map<String, Integer> tokenizeDocument(String mode) throws IOException {
@@ -236,7 +245,11 @@ public class Documento {
     return textHandler.toString();
   }
 
-  public Document getLuceneDocument(Documento documento) throws IOException {
+  public Document getLuceneDocument() {
+    return doc;
+  }
+
+  private Document createLuceneDocument() throws IOException {
     Document doc = new Document();
     doc.add(new TextField("content", getDocumentTokens(), Field.Store.YES));
     System.out.println(doc.get("content"));
