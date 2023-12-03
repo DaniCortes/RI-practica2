@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c7a57fc9-39ed-4d56-a59f-d4a8b91c58fc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/RI/practica2_2/CustomIndex.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/RI/practica2_2/DocumentRank.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/RI/practica2_2/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/RI/practica2_2/SearchGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/books/alice-wonderland.epub" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/books/dracula.epub" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/books/frankenstein.epub" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/books/moby-dick.epub" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/books/pride-and-prejudice.epub" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/books/war-of-the-worlds.epub" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/stopwords/en" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="downloadDocsAutomatically" value="true" />
+        <option name="downloadSourcesAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2Z2LC5iSfOtWTRKKC6GBSmnq7LS" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/Daniel/IdeaProjects/RI-practica2.2/src/main/resources",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "onboarding.tips.debug.path": "C:/Users/Daniel/IdeaProjects/RI-practica2.2/src/main/java/RI/practica2_2/Main.java",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Daniel\IdeaProjects\RI-practica2.2\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Daniel\IdeaProjects\RI-practica2.2\src\main\resources\books" />
+      <recent name="C:\Users\Daniel\IdeaProjects\RI-practica2.2\src\main\resources" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c7a57fc9-39ed-4d56-a59f-d4a8b91c58fc" name="Changes" comment="" />
+      <created>1701615098723</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1701615098723</updated>
+      <workItem from="1701615099793" duration="16434000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
